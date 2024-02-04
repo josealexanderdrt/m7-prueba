@@ -1,27 +1,26 @@
 import request from "supertest";
 import app from "../../server.js";
 import { generateToken } from "../utils.js/login.js";
-import { payloadTest } from "../utils.js/payloadTest.js";
+import { payloadTest, payloadTest2 } from "../utils.js/payloadTest.js";
 
 describe("cafes controller", () => {
   describe("GET /cafes", () => {
     describe("Getting Cafes", () => {
       it("GET /cafes getting a state 200", async () => {
         const response = await request(app).get("/cafes");
-        const status = response.statusCode;
-        expect(status).toBe(200);
+        expect(response.status).toBe(200);
       });
 
       it("is instance of array", async () => {
         const response = await request(app).get("/cafes");
         const cafes = response.body;
-        expect(cafes).toBeInstanceOf(Array);
+        expect(cafes).toBeInstanceOf(Object);
       });
 
-      it("array with information", async () => {
+      it("Informacion", async () => {
         const response = await request(app).get("/cafes");
-        const cafes = response.body;
-        expect(cafes.length).toBeGreaterThanOrEqual(1);
+        const cafes = response.body.cafes;
+        expect(cafes.length).toBeGreaterThan(1);
       });
     });
   });
@@ -47,20 +46,27 @@ describe("cafes controller", () => {
         expect(status).toBe(201);
       });
       it("add new cofe", async () => {
-        const response = await request(app).post("/cafes").send(payloadTest);
+        const response = await request(app).post("/cafes").send(payloadTest2);
         expect(response.body).toBeInstanceOf(Object);
-        console.log("post  ", payloadTest);
       });
     });
   });
 
-  describe("PUT /cafes update with invalid params", () => {
-    it("returns status code 400 when IDs mismatch", async () => {
-      const invalidId = payloadTest.cafe.id + 1;
-      const response = await request(app)
-        .put(`/cafes/${invalidId}`)
-        .send(payloadTest);
-      expect(response.statusCode).toBe(400);
+  describe("PUT /cafes", () => {
+    describe("Update cafe with Invalid ID", () => {
+      const existingCafeId = 2;
+      const data = {
+        travel: {
+          id: 1,
+          nombre: "Prueba",
+        },
+      };
+      it("Invalid ID", async () => {
+        const response = await request(app)
+          .put(`/cafes/${existingCafeId}`)
+          .send(data);
+        expect(response.statusCode).toBe(400);
+      });
     });
   });
 });

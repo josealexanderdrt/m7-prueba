@@ -28,7 +28,7 @@ const cafeById = async (id) => {
   };
 
 
-  const updateCafeDb = async (id, { nombre }) => {
+  const updateCafeDb = async (id ,{ nombre }) => {
     const SQLquery = {
       text: "UPDATE cafes SET nombre = $1 WHERE id = $2 RETURNING *",
       values: [nombre, id],

@@ -66,10 +66,10 @@ const updateCafes = async (req, res) => {
   try {
     const { id } = req.params;
     const { cafe } = req.body;
-    const okProperties = cafe.nombre;
-    if (!cafe || !cafe.nombre || !okProperties) {
+    const cafeId = parseInt(id, 10);
+    if (!cafe || !cafe.nombre || !cafe.id || cafe.id !== cafeId) {
       res.status(400).json({
-        message: "The cafe name is required to add",
+        message: "All the appropriate ones are necessary to update Cafe",
       });
     } else {
       const cafeForUpdate = await updateCafeDb(id, cafe);
@@ -104,25 +104,5 @@ const deleteCafes = async (req, res) => {
       .json({ error: errorFound[0].message });
   }
 };
-
-/* 
-
-
-app.delete("/cafes/:id", (req, res) => {
-    const jwt = req.header("Authorization")
-    if (jwt) {
-        const { id } = req.params
-        const cafeIndexFound = cafes.findIndex(c => c.id == id)
-
-        if (cafeIndexFound >= 0) {
-            cafes.splice(cafeIndexFound, 1)
-            console.log(cafeIndexFound, cafes)
-            res.send(cafes)
-        } else {
-            res.status(404).send({ message: "No se encontró ningún cafe con ese id" })
-        }
-
-    } else res.status(400).send({ message: "No recibió ningún token en las cabeceras" })
-}) */
 
 export { getAllCafes, getCafeById, createCafes, updateCafes, deleteCafes };
