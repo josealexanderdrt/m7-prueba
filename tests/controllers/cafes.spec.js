@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../index.js";
+import app from "../../server.js";
 import { generateToken } from "../utils.js/login.js";
 import { payloadTest } from "../utils.js/payloadTest.js";
 
